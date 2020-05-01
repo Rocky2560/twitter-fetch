@@ -1,4 +1,4 @@
-package kafka.twitter.prop;
+package kafka.twitter;
 
 import java.io.FileInputStream;
 import java.io.IOException;

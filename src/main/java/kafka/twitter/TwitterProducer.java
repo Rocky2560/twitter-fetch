@@ -1,4 +1,4 @@
-package kafka.twitter.prod;
+package kafka.twitter;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -12,16 +12,14 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-import kafka.twitter.prop.GetProperty;
+import connections.MongoConnection;
 import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +39,7 @@ public class TwitterProducer {
     JsonObject tweetinfo;
 
     KakfaProducerConfig kpc = new KakfaProducerConfig();
-
-
+    MongoConnection mc = new MongoConnection();
 
     public TwitterProducer() throws IOException {
         this.consumerKey = gp.getConsumerKey();
@@ -90,17 +87,22 @@ public class TwitterProducer {
                 if (country_code.equals("NP"))
                 {
                     userinfo = getUserObject(msg);
-                    kpc.SendToTopic(gp.getUserTopic(), producer_user, userinfo);
+                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo));
+//                    kpc.SendToTopic(gp.getUserTopic(), producer_user, userinfo);
 
                     tweetinfo = getTweetObject(msg, userinfo);
                     kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, userinfo);
-//
-//                    System.out.println(userinfo);
-//                    System.out.println(tweetinfo);
                 }
             }
         }
         logger.info("End of application");
+    }
+
+    private String getUserID(JsonObject userinfo){
+        String user_id = userinfo
+                .get("id_str")
+                .getAsString();
+        return user_id;
     }
 
     private JsonObject getUserObject(String msg) {
@@ -110,6 +112,7 @@ public class TwitterProducer {
                     .getAsJsonObject()
                     .get("user")
                     .getAsJsonObject();
+
 
             //check if id exists in mongo, if exists update document if not send to kafka topic
 
