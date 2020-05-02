@@ -16,6 +16,7 @@ import connections.MongoConnection;
 import org.apache.kafka.clients.producer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import testpackage.ReadJsonFile;
 
 
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class TwitterProducer {
         //create a kafka producer
         KafkaProducer<String, String> producer_user = kpc.createKafkaProducer();
         KafkaProducer<String, String> producer_tweets = kpc.createKafkaProducer();
+        ReadJsonFile rjf = new ReadJsonFile();
 
         //loop to send tweets to kafka
         // on a different thread, or multiple different threads....
@@ -87,7 +89,8 @@ public class TwitterProducer {
                 if (country_code.equals("NP"))
                 {
                     userinfo = getUserObject(msg);
-                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo));
+                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
+//                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo));
 //                    kpc.SendToTopic(gp.getUserTopic(), producer_user, userinfo);
 
                     tweetinfo = getTweetObject(msg, userinfo);
@@ -112,9 +115,6 @@ public class TwitterProducer {
                     .getAsJsonObject()
                     .get("user")
                     .getAsJsonObject();
-
-
-            //check if id exists in mongo, if exists update document if not send to kafka topic
 
         }catch (NullPointerException e){
             logger.error("No field user in json ", e);
