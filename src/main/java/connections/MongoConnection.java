@@ -28,6 +28,13 @@ public class MongoConnection {
 
     public MongoConnection() throws IOException {}
 
+//    public MongoCollection mongoCollection(){
+//        MongoClient mongo = new MongoClient(mongo_host, Integer.parseInt(mongo_port));
+//        MongoDatabase db = mongo.getDatabase(mongo_db);
+//        MongoCollection<Document> collection = db.getCollection(mongo_collection);
+//        return collection;
+//    }
+
     public void prodMongo(JsonObject jsonObject,
                           KafkaProducer<String, String> producer_user,
                           String userID,
@@ -50,6 +57,7 @@ public class MongoConnection {
             //send to kafka topic
             kpc.SendToTopic(gp.getUserTopic(), producer_user, jsonObject);
         }
+        mongo.close();
     }
 
 //    public static void main(String[] args) throws IOException {
