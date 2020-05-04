@@ -22,7 +22,7 @@ public class MongoConnection {
     GetProperty gp = new GetProperty();
 
     String mongo_host = gp.getMongoHost();
-    int mongo_port = gp.getMongoPort();
+    String mongo_port = gp.getMongoPort();
     String mongo_db = gp.getMongoDatabase();
     String mongo_collection = gp.getMongoCollection();
 
@@ -33,7 +33,7 @@ public class MongoConnection {
                           String userID,
                           KakfaProducerConfig kpc) {
 
-        MongoClient mongo = new MongoClient(mongo_host, mongo_port);
+        MongoClient mongo = new MongoClient(mongo_host, Integer.parseInt(mongo_port));
         MongoDatabase db = mongo.getDatabase(mongo_db);
         MongoCollection<Document> collection = db.getCollection(mongo_collection);
 

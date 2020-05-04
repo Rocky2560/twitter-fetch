@@ -31,7 +31,7 @@ public class GetProperty {
 
     public String getMongoHost(){ return this.prop.getProperty("mongo_host"); }
 
-    public int getMongoPort(){ return Integer.parseInt(this.prop.getProperty("mongo_port")); }
+    public String getMongoPort(){ return this.prop.getProperty("mongo_port"); }
 
     public String getMongoDatabase(){ return this.prop.getProperty("mongo_db"); }
 
