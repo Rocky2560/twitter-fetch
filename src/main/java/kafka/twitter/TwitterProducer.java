@@ -94,7 +94,7 @@ public class TwitterProducer {
 //                    kpc.SendToTopic(gp.getUserTopic(), producer_user, userinfo);
 
                     tweetinfo = getTweetObject(msg, userinfo);
-                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, userinfo);
+                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
                 }
             }
         }
