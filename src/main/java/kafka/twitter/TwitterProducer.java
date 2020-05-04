@@ -99,6 +99,7 @@ public class TwitterProducer {
             }
         }
         logger.info("End of application");
+//        producer_tweets.close();
     }
 
     private String getUserID(JsonObject userinfo){
