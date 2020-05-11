@@ -6,7 +6,6 @@ import kafka.twitter.GetProperty;
 import kafka.twitter.KakfaProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import spark.ExplodeInsert;
-import testpackage.ReadJsonFile;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.*;

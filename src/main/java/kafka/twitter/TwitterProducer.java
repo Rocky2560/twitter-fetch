@@ -18,7 +18,6 @@ import org.apache.kafka.clients.producer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ExplodeInsert;
-import testpackage.ReadJsonFile;
 
 
 import java.io.IOException;
@@ -77,8 +76,6 @@ public class TwitterProducer {
 
         ExplodeInsert expInsert = new ExplodeInsert();
 
-
-        ReadJsonFile rjf = new ReadJsonFile();
 
         //loop to send tweets to kafka
         // on a different thread, or multiple different threads....

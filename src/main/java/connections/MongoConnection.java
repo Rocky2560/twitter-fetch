@@ -10,7 +10,6 @@ import kafka.twitter.GetProperty;
 import kafka.twitter.KakfaProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.bson.Document;
-import testpackage.ReadJsonFile;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
