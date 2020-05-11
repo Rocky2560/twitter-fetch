@@ -1,5 +1,6 @@
 package kafka.twitter;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.twitter.hbc.ClientBuilder;
@@ -23,6 +24,7 @@ import spark.ExplodeInsert;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
@@ -97,7 +99,6 @@ public class TwitterProducer {
 
                 if (country_code.equals("NP"))
                 {
-                    System.out.println(msg);
                     userinfo = getUserObject(msg);
 //                    Check if Data Exists in MongoDB
                     mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
@@ -179,8 +180,11 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-//        List<String> terms = Lists.newArrayList("covid");
-//        hosebirdEndpoint.trackTerms(terms);
+        List<String> terms = Lists.newArrayList("foodmandu", "Foodmandu", "bigmart", "Bigmart", "yetiairlines", "YetiAirlines");
+        hosebirdEndpoint.trackTerms(terms);
+
+        List<Long> id = Lists.newArrayList(25073877L);
+        hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
                 //Kathmandu and Pokhara
