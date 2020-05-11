@@ -89,6 +89,7 @@ public class TwitterProducer {
                 e.printStackTrace();
                 client.stop();
             }
+            System.out.println(msg);
             if (msg != null) {
                 String country_code = jsonParser.parse(msg)
                         .getAsJsonObject()
@@ -180,11 +181,11 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-        List<String> terms = Lists.newArrayList("foodmandu", "Foodmandu", "bigmart", "Bigmart", "yetiairlines", "YetiAirlines");
-        hosebirdEndpoint.trackTerms(terms);
+//        List<String> terms = Lists.newArrayList("foodmandu", "Foodmandu", "bigmart", "Bigmart", "yetiairlines", "YetiAirlines");
+//        hosebirdEndpoint.trackTerms(terms);
 
-        List<Long> id = Lists.newArrayList(25073877L);
-        hosebirdEndpoint.followings(id);
+//        List<Long> id = Lists.newArrayList(25073877L);
+//        hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
                 //Kathmandu and Pokhara
