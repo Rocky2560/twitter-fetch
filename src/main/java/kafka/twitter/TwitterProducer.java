@@ -89,7 +89,7 @@ public class TwitterProducer {
                 e.printStackTrace();
                 client.stop();
             }
-            System.out.println(msg);
+//            System.out.println(msg);
             if (msg != null) {
                 String country_code = jsonParser.parse(msg)
                         .getAsJsonObject()
