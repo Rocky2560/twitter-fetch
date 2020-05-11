@@ -64,7 +64,7 @@ class ExplodeInsert {
     df.write
       .format("jdbc")
       .option("url", gp.getPGUrl)
-      .option("dbtable", "public"+gp.getPGTweetsTable)
+      .option("dbtable", "public."+gp.getPGTweetsTable)
       .option("user", gp.getPGUsername)
       .option("password", gp.getPGPassword)
       .mode("append")
@@ -76,7 +76,7 @@ class ExplodeInsert {
     df.write
       .format("jdbc")
       .option("url", gp.getPGUrl)
-      .option("dbtable","public"+gp.getPGUserTable)
+      .option("dbtable","public."+gp.getPGUserTable)
       .option("user", gp.getPGUsername)
       .option("password", gp.getPGPassword)
       .mode("append")
