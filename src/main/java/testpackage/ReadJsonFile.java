@@ -11,7 +11,8 @@ import java.io.IOException;
 public class ReadJsonFile {
     public JsonObject fileJson() throws IOException {
         JsonParser jsonParser = new JsonParser();
-        JsonElement jsonObject = jsonParser.parse(new FileReader("/Users/tchiringlama/tweet1.json"));
+        JsonElement jsonObject = jsonParser.parse(new FileReader("/Users/tchiringlama/tweets3"));
+//        JsonElement jsonObject = jsonParser.parse(new FileReader("/Users/tchiringlama/tweet2"));
         return (JsonObject) jsonObject;
     }
 }

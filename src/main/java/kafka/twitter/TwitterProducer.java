@@ -13,13 +13,16 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 import connections.MongoConnection;
+import connections.PostgresConnection;
 import org.apache.kafka.clients.producer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.ExplodeInsert;
 import testpackage.ReadJsonFile;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -50,11 +53,11 @@ public class TwitterProducer {
         this.bootstrapServers = gp.getBootstrapServer();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         new TwitterProducer().run();
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, SQLException {
         logger.info("Setup");
         //create a twitter client
 
@@ -66,6 +69,15 @@ public class TwitterProducer {
         //create a kafka producer
         KafkaProducer<String, String> producer_user = kpc.createKafkaProducer();
         KafkaProducer<String, String> producer_tweets = kpc.createKafkaProducer();
+
+        PostgresConnection pgc = new PostgresConnection();
+
+        KafkaProducer<String, String> pg_producer_user = kpc.createKafkaProducer();
+        KafkaProducer<String, String> pg_producer_tweets = kpc.createKafkaProducer();
+
+        ExplodeInsert expInsert = new ExplodeInsert();
+
+
         ReadJsonFile rjf = new ReadJsonFile();
 
         //loop to send tweets to kafka
@@ -88,13 +100,21 @@ public class TwitterProducer {
 
                 if (country_code.equals("NP"))
                 {
+                    System.out.println(msg);
                     userinfo = getUserObject(msg);
+//                    Check if Data Exists in MongoDB
                     mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
-//                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo));
-//                    kpc.SendToTopic(gp.getUserTopic(), producer_user, userinfo);
 
+                    //Check if Data Exists in Postgres
+                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+
+                    //Send Tweets Data to:
                     tweetinfo = getTweetObject(msg, userinfo);
+                    //MongoDB
                     kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
+                    //Postgres
+                    expInsert.InsertTweets(msg);
+//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.tweetsInfo(msg)));
                 }
             }
         }
@@ -156,7 +176,6 @@ public class TwitterProducer {
 
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue) {
-
 
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
