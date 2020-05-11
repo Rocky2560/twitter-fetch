@@ -98,76 +98,76 @@ class ExplodeInsert {
 
 
 
-object ExplodeTest {
-
-  Logger.getLogger("org").setLevel(Level.ERROR)
-  Logger.getLogger("akka").setLevel(Level.ERROR)
-
-  def main(args: Array[String]): Unit = {
-    val cdf = new CreateDF
-    val read_file = new ReadJsonFile
-    val str_json = read_file.fileJson()
-    val df = cdf.json_to_df(str_json.toString: String)
-    //    df.show(truncate = false)
-    //    df.printSchema()
-
-    //    val place_df = df.withColumn("place", explodeDF("place"))
-    //    val place_df = df.select("place.bounding_box.coordinates")
-    //    place_df.show(truncate = false)
-
-
-    //    val initial_tweets_df = df.select(col("created_at"), "id", "text", "source","user.id", "in_reply_to_status_id", "in_reply_to_user_id", "lang", "retweet_count",
-    //      "reply_count", "place.bounding_box.coordinates", "entities.hashtags", "entities.user_mentions")
-
-
-    val arrToString = udf((value: Seq[Seq[Double]]) => {
-//      value.map(x=> x.map(_.toString).mkString(",")).mkString("::")
-      value.map(x=> x.map(_.toString).mkString("\"",  "," , "\"")).mkString(",")
-    })
-
+//object ExplodeTest {
+//
+//  Logger.getLogger("org").setLevel(Level.ERROR)
+//  Logger.getLogger("akka").setLevel(Level.ERROR)
+//
+//  def main(args: Array[String]): Unit = {
+//    val cdf = new CreateDF
+//    val read_file = new ReadJsonFile
+//    val str_json = read_file.fileJson()
+//    val df = cdf.json_to_df(str_json.toString: String)
+//    //    df.show(truncate = false)
+//    //    df.printSchema()
+//
+//    //    val place_df = df.withColumn("place", explodeDF("place"))
+//    //    val place_df = df.select("place.bounding_box.coordinates")
+//    //    place_df.show(truncate = false)
+//
+//
+//    //    val initial_tweets_df = df.select(col("created_at"), "id", "text", "source","user.id", "in_reply_to_status_id", "in_reply_to_user_id", "lang", "retweet_count",
+//    //      "reply_count", "place.bounding_box.coordinates", "entities.hashtags", "entities.user_mentions")
+//
+//
+//    val arrToString = udf((value: Seq[Seq[Double]]) => {
+////      value.map(x=> x.map(_.toString).mkString(",")).mkString("::")
+//      value.map(x=> x.map(_.toString).mkString("\"",  "," , "\"")).mkString(",")
+//    })
+//
+////    val tweets_df = df.select(col("created_at"), col("id"), col("text"), col("source"), col("user.id").as("user_id"),
+////      col("in_reply_to_status_id"), col("in_reply_to_user_id"),
+////      col("lang"), col("retweet_count"), col("reply_count"), col("place.bounding_box.coordinates"),
+////      col("entities.hashtags"), col("entities.user_mentions.id").as("user_mentions_id"),
+////      col("entities.user_mentions.name").as("user_mentions_name")).withColumn("coordinates", explode(col("coordinates"))).
+////      withColumn("coordinates", arrToString(col("coordinates")))
+//
+//
+//    val arrToString_Entites = udf((value: Seq[Seq[Double]]) => {
+//      value.map(x=> x.map(_.toString).mkString("\"",  "," , "\"")).mkString(",")
+//    })
+//
+//
 //    val tweets_df = df.select(col("created_at"), col("id"), col("text"), col("source"), col("user.id").as("user_id"),
-//      col("in_reply_to_status_id"), col("in_reply_to_user_id"),
+//      col("in_reply_to_status_id_str").as("in_reply_to_status_id"), col("in_reply_to_user_id_str").as("in_reply_to_user_id"),
 //      col("lang"), col("retweet_count"), col("reply_count"), col("place.bounding_box.coordinates"),
-//      col("entities.hashtags"), col("entities.user_mentions.id").as("user_mentions_id"),
-//      col("entities.user_mentions.name").as("user_mentions_name")).withColumn("coordinates", explode(col("coordinates"))).
+//      col("entities").cast("String")).withColumn("coordinates", explode(col("coordinates"))).
 //      withColumn("coordinates", arrToString(col("coordinates")))
-
-
-    val arrToString_Entites = udf((value: Seq[Seq[Double]]) => {
-      value.map(x=> x.map(_.toString).mkString("\"",  "," , "\"")).mkString(",")
-    })
-
-
-    val tweets_df = df.select(col("created_at"), col("id"), col("text"), col("source"), col("user.id").as("user_id"),
-      col("in_reply_to_status_id_str").as("in_reply_to_status_id"), col("in_reply_to_user_id_str").as("in_reply_to_user_id"),
-      col("lang"), col("retweet_count"), col("reply_count"), col("place.bounding_box.coordinates"),
-      col("entities").cast("String")).withColumn("coordinates", explode(col("coordinates"))).
-      withColumn("coordinates", arrToString(col("coordinates")))
-
-
-    val user_df = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
-
-    tweets_df.show(truncate = false)
-    tweets_df.printSchema()
+//
+//
+//    val user_df = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
+//
+//    tweets_df.show(truncate = false)
 //    tweets_df.printSchema()
-//        user_df.show(truncate = true)
-
-//    val json_tweets = tweets_df.na.fill("null").toJSON.collectAsList().get(0).toString
-//    val json_user = user_df.na.fill("null").toJSON.collectAsList().toString
-//    println(json_tweets)
-
-    tweets_df.write
-      .format("jdbc")
-      .option("url", "jdbc:postgresql://10.10.5.32:5432/twitterdb")
-      .option("dbtable", "public.tweetsinfo3")
-      .option("user", "twitter")
-      .option("password", "twitter123")
-      .mode("append")
-      .save()
-
-    //    println(json_user)
-
-    //    val json_tweets = cdf.sqlContext.read().json(tweets_df.toJSON())
-
-  }
-}
+////    tweets_df.printSchema()
+////        user_df.show(truncate = true)
+//
+////    val json_tweets = tweets_df.na.fill("null").toJSON.collectAsList().get(0).toString
+////    val json_user = user_df.na.fill("null").toJSON.collectAsList().toString
+////    println(json_tweets)
+//
+//    tweets_df.write
+//      .format("jdbc")
+//      .option("url", "jdbc:postgresql://10.10.5.32:5432/twitterdb")
+//      .option("dbtable", "public.tweetsinfo3")
+//      .option("user", "twitter")
+//      .option("password", "twitter123")
+//      .mode("append")
+//      .save()
+//
+//    //    println(json_user)
+//
+//    //    val json_tweets = cdf.sqlContext.read().json(tweets_df.toJSON())
+//
+//  }
+//}
