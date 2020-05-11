@@ -43,9 +43,9 @@ public class GetProperty {
 
     public String getPGUrl(){ return this.prop.getProperty("postgres_url"); }
 
-    public String getPGTweetsTable(){ return this.prop.getProperty("postgres_user_table"); }
+    public String getPGUserTable(){ return this.prop.getProperty("postgres_user_table"); }
 
-    public String getPGUserTable(){ return this.prop.getProperty("postgres_tweets_table"); }
+    public String getPGTweetsTable(){ return this.prop.getProperty("postgres_tweets_table"); }
 
     public String getPGUsername(){ return this.prop.getProperty("postgres_user"); }
 
