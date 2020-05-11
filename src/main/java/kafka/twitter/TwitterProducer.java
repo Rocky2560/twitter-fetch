@@ -85,11 +85,11 @@ public class TwitterProducer {
             String msg = null;
             try {
                 msg = msgQueue.poll(5, TimeUnit.SECONDS);
+//                System.out.println(msg);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 client.stop();
             }
-//            System.out.println(msg);
             if (msg != null) {
                 String country_code = jsonParser.parse(msg)
                         .getAsJsonObject()
@@ -181,13 +181,14 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-//        List<String> terms = Lists.newArrayList("foodmandu", "Foodmandu", "bigmart", "Bigmart", "yetiairlines", "YetiAirlines");
+//        List<String> terms = Lists.newArrayList("YetiAirlines");
 //        hosebirdEndpoint.trackTerms(terms);
 
 //        List<Long> id = Lists.newArrayList(25073877L);
 //        hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
+
                 //Kathmandu and Pokhara
 //                new Location(
 //                        new Location.Coordinate(84.8145316838, 27.2710335212), // south west
@@ -195,7 +196,7 @@ public class TwitterProducer {
 //                new Location(
 //                        new Location.Coordinate(83.5464124476, 27.732952078), // south west
 //                        new Location.Coordinate( 84.4351982851,    28.5943287285))
-
+//
                                 new Location(
                         new Location.Coordinate(79.8695023432, 25.6533705916), // south west
                         new Location.Coordinate( 88.4373289467,    30.6875340549))
