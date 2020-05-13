@@ -1,24 +1,12 @@
 package spark
 
-import com.google.gson.JsonObject
 import kafka.twitter.GetProperty
-import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{DataFrame, Encoders, Row}
-import org.json.JSONObject
-//import testpackage.ReadJsonFile
-//import spark.TestLocation.sp
-
-import scala.util.matching.Regex
-//import testpackage.ReadJsonFile
-//import testpackage.ReadJsonFile
 import org.apache.spark.sql.functions._
 
 
 class ExplodeInsert {
   val cdf = new CreateDF
-  //  val read_file = new ReadJsonFile
-  //  val str_json: JsonObject = read_file.fileJson()
-  //  val df: DataFrame = cdf.json_to_df(str_json.toString: String)
   val gp: GetProperty = new GetProperty;
   val sp: CreateSparkConnection = new CreateSparkConnection;
 
