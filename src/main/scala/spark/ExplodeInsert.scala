@@ -113,10 +113,6 @@ class ExplodeInsert {
 
     val df: DataFrame = cdf.json_to_df(msg: String)
 
-    val arrToString = udf((value: Seq[Seq[Double]]) => {
-      value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
-    })
-
     val check_entities_mentions = df.select(col("entities.user_mentions").getItem(0)).collectAsList()
     val check_entities_hashtags = df.select(col("entities.hashtags").getItem(0)).collectAsList()
 
