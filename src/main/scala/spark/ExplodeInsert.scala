@@ -126,8 +126,7 @@ class ExplodeInsert {
           df.select(col("created_at"), col("id"), col("text"), col("source"), col("user.id").as("user_id"),
             col("in_reply_to_status_id_str").as("in_reply_to_status_id"), col("in_reply_to_user_id_str").as("in_reply_to_user_id"),
             col("lang"), col("retweet_count"), col("reply_count"),
-            col("entities.hashtags.text").as("hashtags")).withColumn("coordinates", explode(col("coordinates"))).
-            withColumn("coordinates", arrToString(col("coordinates")))
+            col("entities.hashtags.text").as("hashtags"))
         }
         else if (check_entities_mentions.get(0)(0) != null && check_entities_hashtags.get(0)(0) == null) {
           df.select(col("created_at"), col("id"), col("text"), col("source"), col("user.id").as("user_id"),
