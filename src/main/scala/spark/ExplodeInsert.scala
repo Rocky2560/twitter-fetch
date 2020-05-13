@@ -15,7 +15,7 @@ class ExplodeInsert {
     val df: DataFrame = cdf.json_to_df(msg: String)
     println(msg)
     val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
-    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), LocationCleaning(user_df)))
+    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), LocationCleaning(user_df_temp)))
     user_df
   }
 
