@@ -91,37 +91,47 @@ public class TwitterProducer {
                 client.stop();
             }
             if (msg != null) {
-                String country_code = jsonParser.parse(msg)
-                        .getAsJsonObject()
-                        .get("place")
-                        .getAsJsonObject()
-                        .get("country_code")
-                        .getAsString();
 
-                if (country_code.equals("NP"))
-                {
-                    userinfo = getUserObject(msg);
+                try {
+                    String country_code = jsonParser.parse(msg)
+                            .getAsJsonObject()
+                            .get("place")
+                            .getAsJsonObject()
+                            .get("country_code")
+                            .getAsString();
+
+                    if (country_code.equals("NP")) {
+                        userinfo = getUserObject(msg);
 //                    Check if Data Exists in MongoDB
+                        mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
+
+                        //Check if Data Exists in Postgres
+                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+
+                        //Send Tweets Data to:
+                        tweetinfo = getTweetObject(msg, userinfo);
+                        //MongoDB
+                        kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
+                        //Postgres
+                        expInsert.InsertTweets(msg);
+//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.tweetsInfo(msg)));
+                    }
+                } catch (Exception e) {
+                    //Mongo
                     mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
-
-                    //Check if Data Exists in Postgres
-                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
-
-                    //Send Tweets Data to:
-                    tweetinfo = getTweetObject(msg, userinfo);
-                    //MongoDB
                     kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
                     //Postgres
-                    expInsert.InsertTweets(msg);
-//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.tweetsInfo(msg)));
+                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+                    expInsert.SpecficInsert(msg);
                 }
+
             }
         }
         logger.info("End of application");
 //        producer_tweets.close();
     }
 
-    private String getUserID(JsonObject userinfo){
+    private String getUserID(JsonObject userinfo) {
         String user_id = userinfo
                 .get("id_str")
                 .getAsString();
@@ -136,14 +146,14 @@ public class TwitterProducer {
                     .get("user")
                     .getAsJsonObject();
 
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             logger.error("No field user in json ", e);
             return null;
         }
         return user_info;
     }
 
-    private JsonObject getTweetObject(String msg,JsonObject userinfo){
+    private JsonObject getTweetObject(String msg, JsonObject userinfo) {
         JsonObject tweet_info;
 
         String screen_name;
@@ -166,7 +176,7 @@ public class TwitterProducer {
 
             tweet_info.remove("user");
 
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             logger.error("Empty data set ", e);
             return null;
         }
@@ -181,11 +191,12 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-//        List<String> terms = Lists.newArrayList("YetiAirlines");
-//        hosebirdEndpoint.trackTerms(terms);
+        List<String> terms = Lists.newArrayList("#YetiAirlines", "#yetiairlines", "bigmart", "Bigmart", "#Foodmandu", "Foodmandu", "#foodmandu", "foodmandu", "FlyYeti", "#BigMart", "#BIGMART", "#Bigmart");
 
-//        List<Long> id = Lists.newArrayList(25073877L);
-//        hosebirdEndpoint.followings(id);
+        hosebirdEndpoint.trackTerms(terms);
+
+        List<Long> id = Lists.newArrayList(214414640L, 1533033576L);
+        hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
 
