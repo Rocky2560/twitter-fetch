@@ -109,7 +109,8 @@ class ExplodeInsert {
 
 
   def LocationCleaning(user_df: DataFrame): String = {
-    val city_df1 = sp.spark.read.format("csv").option("header", "true").load("/Users/tchiringlama/nepali_cities.csv")
+//    val city_df1 = sp.spark.read.format("csv").option("header", "true").load("/Users/tchiringlama/nepali_cities.csv")
+    val city_df1 = sp.spark.read.format("csv").option("header", "true").load(gp.getCity())
     val city_df = city_df1.select(city_df1.columns.map(c => lower(col(c)).alias(c)): _*)
 
     val countries_list = List("united arab emirates", "nigeria", "ghana", "pitcairn islands", "ethiopia", "algeria", "niue",

@@ -51,5 +51,8 @@ public class GetProperty {
 
     public String getPGPassword(){ return this.prop.getProperty("postgres_password"); }
 
+    public String getCity(){ return this.prop.getProperty("city_file"); }
+
+
 
 }
