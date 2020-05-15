@@ -102,17 +102,18 @@ public class TwitterProducer {
 
                     if (country_code.equals("NP")) {
                         userinfo = getUserObject(msg);
-//                    Check if Data Exists in MongoDB
+                        //MongoDB
+                        //Check if Data Exists in MongoDB
                         mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
-
-                        //Check if Data Exists in Postgres
-                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
-
                         //Send Tweets Data to:
                         tweetinfo = getTweetObject(msg, userinfo);
-                        //MongoDB
                         kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
+
+
                         //Postgres
+                        //Check if Data Exists in Postgres
+                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+                        //Insert Tweet Data to postgres
                         expInsert.InsertTweets(msg);
 //                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.tweetsInfo(msg)));
                     }
