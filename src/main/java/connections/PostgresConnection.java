@@ -50,10 +50,10 @@ public class PostgresConnection {
 
         } else {
             //send to postgres
-            explode.InsertUserInfo(msg);
+//            explode.InsertUserInfo(msg);
 
             //send to kafka
-//            kpc.SendToTopic("test-tweets", user_producer, (JsonObject) jsonParser.parse(expInsert.userInfo(rjf.fileJson().toString())));
+            kpc.SendToTopic("test-tweets", user_producer, (JsonObject) jsonParser.parse(explode.convertStr(msg)));
 //            kpc.SendToTopic(topic, user_producer, (JsonObject) jsonParser.parse(explode.userInfo(msg)));
         }
     }

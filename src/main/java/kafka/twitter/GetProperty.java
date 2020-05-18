@@ -37,7 +37,7 @@ public class GetProperty {
 
     public String getMongoCollection(){ return this.prop.getProperty("mongo_collection"); }
 
-    public String getPGUserTopic(){ return this.prop.getProperty("pg_tweet_topic"); }
+    public String getPGUserTopic(){ return this.prop.getProperty("pg_user_topic"); }
 
     public String getPGTweetsTopic(){ return this.prop.getProperty("pg_tweet_topic"); }
 

@@ -113,9 +113,12 @@ public class TwitterProducer {
                         //Postgres
                         //Check if Data Exists in Postgres
                         pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+
+//                        kpc.SendToTopic("test-tweets", pg_producer_user, (JsonObject) jsonParser.parse(expInsert.convertStr(msg)));
+
                         //Insert Tweet Data to postgres
                         expInsert.InsertTweets(msg);
-//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.tweetsInfo(msg)));
+//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(String.valueOf(expInsert.tweetsInfo(msg))));
                     }
                 } catch (Exception e) {
                     //Mongo
@@ -192,11 +195,17 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-        List<String> terms = Lists.newArrayList("#YetiAirlines", "#yetiairlines", "bigmart", "Bigmart", "#Foodmandu", "Foodmandu", "#foodmandu", "foodmandu", "FlyYeti", "#BigMart", "#BIGMART", "#Bigmart");
+        List<String> terms = Lists.newArrayList("#YetiAirlines", "#yetiairlines", "FlyYeti",
+                "#Foodmandu", "Foodmandu", "#foodmandu", "foodmandu",
+                "#BigMart", "#BIGMART", "#Bigmart", "bigmart", "Bigmart",
+                "Bhatbhateni", "#Bhatbhateni", "bhatbhateni", "#bhatbhateni",
+                "onlinekhabar", "Online_khabar", "#onlinekhabar", "#Onlinekhabar" , "#OnlineKhabar",
+                "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro"
+        );
 
         hosebirdEndpoint.trackTerms(terms);
 
-        List<Long> id = Lists.newArrayList(214414640L, 1533033576L);
+        List<Long> id = Lists.newArrayList(214414640L, 1533033576L, 574780737L, 365918709L, 3832931652L, 2562624290L);
         hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
