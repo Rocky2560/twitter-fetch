@@ -122,11 +122,11 @@ public class TwitterProducer {
                     }
                 } catch (Exception e) {
                     //Mongo
-//                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
-//                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
-//                    //Postgres
-//                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
-//                    expInsert.SpecficInsert(msg);
+                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
+                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
+                    //Postgres
+                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+                    expInsert.SpecficInsert(msg);
                 }
 
             }
