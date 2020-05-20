@@ -54,7 +54,7 @@ public class PostgresConnection {
 
             //send to kafka
 //            kpc.SendToTopic("test-tweets", user_producer, (JsonObject) jsonParser.parse(explode.convertStr(msg)));
-//            kpc.SendToTopic(topic, user_producer, (JsonObject) jsonParser.parse(explode.userInfo(msg)));
+//            kpc.SendToTopic(topic, user_producer, (JsonObject) jsonParser.parse(explode.convertStr(msg)));
         }
     }
 

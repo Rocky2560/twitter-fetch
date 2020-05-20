@@ -108,8 +108,8 @@ public class TwitterProducer {
                         //Send Tweets Data to:
                         tweetinfo = getTweetObject(msg, userinfo);
                         kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
-
-
+//
+//
                         //Postgres
                         //Check if Data Exists in Postgres
                         pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
@@ -118,15 +118,15 @@ public class TwitterProducer {
 
                         //Insert Tweet Data to postgres
                         expInsert.InsertTweets(msg);
-//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(String.valueOf(expInsert.tweetsInfo(msg))));
+//                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.convertStrTweets(msg)));
                     }
                 } catch (Exception e) {
                     //Mongo
-                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
-                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
-                    //Postgres
-                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
-                    expInsert.SpecficInsert(msg);
+//                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
+//                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
+//                    //Postgres
+//                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+//                    expInsert.SpecficInsert(msg);
                 }
 
             }
