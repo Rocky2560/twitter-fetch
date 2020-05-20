@@ -83,8 +83,8 @@ class ExplodeInsert {
 
   def InsertTweets(msg: String) = {
     val df: DataFrame = tweetsInfo(msg)
-    df.show(truncate = false)
-    df.printSchema()
+//    df.show(truncate = false)
+//    df.printSchema()
     df.write
       .format("jdbc")
       .option("url", gp.getPGUrl)
