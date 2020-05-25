@@ -54,9 +54,9 @@ public class TwitterProducer {
         this.bootstrapServers = gp.getBootstrapServer();
     }
 
-    public static void main(String[] args) throws IOException, SQLException {
-        new TwitterProducer().run();
-    }
+//    public static void main(String[] args) throws IOException, SQLException {
+//        new TwitterProducer().run();
+//    }
 
     public void run() throws IOException, SQLException {
         logger.info("Setup");
