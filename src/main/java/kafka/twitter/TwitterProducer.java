@@ -200,12 +200,13 @@ public class TwitterProducer {
                 "#BigMart", "#BIGMART", "#Bigmart", "bigmart", "Bigmart",
                 "Bhatbhateni", "#Bhatbhateni", "bhatbhateni", "#bhatbhateni",
                 "onlinekhabar", "Online_khabar", "#onlinekhabar", "#Onlinekhabar" , "#OnlineKhabar",
-                "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro"
+                "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro",
+                "#valleycoldstore", "Valley Cold Store", "#valleyColdStore", "#Valleycoldstore"
         );
 
         hosebirdEndpoint.trackTerms(terms);
 
-        List<Long> id = Lists.newArrayList(214414640L, 1533033576L, 574780737L, 365918709L, 3832931652L, 2562624290L);
+        List<Long> id = Lists.newArrayList(214414640L, 1533033576L, 574780737L, 365918709L, 3832931652L, 2562624290L, 2713545668L);
         hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
