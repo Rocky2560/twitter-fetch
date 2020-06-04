@@ -201,12 +201,22 @@ public class TwitterProducer {
                 "Bhatbhateni", "#Bhatbhateni", "bhatbhateni", "#bhatbhateni",
                 "onlinekhabar", "Online_khabar", "#onlinekhabar", "#Onlinekhabar" , "#OnlineKhabar",
                 "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro",
-                "#valleycoldstore", "Valley Cold Store", "#valleyColdStore", "#Valleycoldstore"
+                "#valleycoldstore", "Valley Cold Store", "#valleyColdStore", "#Valleycoldstore",
+                "#orlando", "#Orlando"
         );
 
         hosebirdEndpoint.trackTerms(terms);
 
-        List<Long> id = Lists.newArrayList(214414640L, 1533033576L, 574780737L, 365918709L, 3832931652L, 2562624290L, 2713545668L);
+        List<Long> id = Lists.newArrayList(214414640L, 1533033576L, 574780737L, 365918709L, 3832931652L, 2562624290L,
+                2713545668L,
+                219041453L,          //@OrlandoPolice
+                564668361L,          //@OrangeCoFL
+                20173932L,          //@OCCC
+                798973032362606600L, //@RepValDemings
+                818713465653051392L, //@RepDarrenSoto
+                30924790L            //@orlandomayor
+
+        );
         hosebirdEndpoint.followings(id);
 
         hosebirdEndpoint.locations(Arrays.asList(
