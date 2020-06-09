@@ -202,7 +202,22 @@ public class TwitterProducer {
                 "onlinekhabar", "Online_khabar", "#onlinekhabar", "#Onlinekhabar" , "#OnlineKhabar",
                 "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro",
                 "#valleycoldstore", "Valley Cold Store", "#valleyColdStore", "#Valleycoldstore",
-                "#orlando", "#Orlando"
+                "#orlando", "#Orlando",
+                "BhojDeals", "bhojdeals", "#bhojdeals",
+                "Foodmario", "globalfoodmario", "#foodmario", "#Foodmario",
+                "Tatomitho", "tatomitho",
+                "ekantinpur", "Ekantipur", "ekantipur_com",
+                "Annapurna Post", "annapurnapost", "annapurna post",
+                "nagarik_news", "nagariknews",
+                "12khari", "baahrakhari",
+                "CitizenPost News", "Cpostnews", "#cpostnews",
+                "hamrakura",
+                "Saleways", "saleways",
+                "Salesberry", "#salesberry", "#Salesberry", "salesberry"
+
+
+
+
         );
 
         hosebirdEndpoint.trackTerms(terms);
@@ -214,7 +229,18 @@ public class TwitterProducer {
                 20173932L,          //@OCCC
                 798973032362606600L, //@RepValDemings
                 818713465653051392L, //@RepDarrenSoto
-                30924790L            //@orlandomayor
+                30924790L,            //@orlandomayor
+                3145814942L,            //BhojDeals
+                875680481651695616L,       //foodmario
+                1233344167385780224L,       //tatomitho
+                364761398L,                 //ekantipur_com
+                1568130360L,                //Annapurna_Post
+                2308483814L,                //nagarik_news
+                4886144923L,                    //12khari
+                859986491879051264L,          //Cpostnews
+                1001701014L,                   //hamrakura
+                1090509140923944960L              //SalesBerry2
+
 
         );
         hosebirdEndpoint.followings(id);
