@@ -19,6 +19,7 @@ object TestObj {
     val str_json = read_file.fileJson()
     val df = cdf.json_to_df(str_json.toString: String)
     val checkExist: CheckExist = new CheckExist
+    val explodeInsert: ExplodeInsert = new ExplodeInsert
 
 
     //    //Read From Postgres
@@ -81,12 +82,15 @@ object TestObj {
       value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
     })
 
-    val tweets_df =
-      if (df.columns.contains("extended_tweet")){
-        checkExist.extendedTweet(df)
-      } else {
-        checkExist.mentionsHashtags(df)
-      }
+//    val tweets_df =
+//      if (df.columns.contains("extended_tweet")){
+//        checkExist.extendedTweet(df)
+//      } else {
+//        checkExist.mentionsHashtags(df)
+//      }
+
+    val tweets_df = explodeInsert.SpecificTweets(str_json.toString)
+
 
     tweets_df.show(false)
 
@@ -104,17 +108,17 @@ object TestObj {
     //    tweets_df.printSchema()
 
 
-    //    tweets_df.write
-    //      .format("jdbc")
-    //      .option("url", "jdbc:postgresql://10.10.5.32:5432/twitterdb")
-    //      //      .option("dbtable", gp.getPGTweetsTable)
-    //      .option("dbtable", "tweets_info")
-    //      .option("user", "twitter")
-    //      .option("password", "twitter123")
-    //      .mode("append")
-    //      .save()
-
-  }
+//        tweets_df.write
+//          .format("jdbc")
+//          .option("url", "jdbc:postgresql://10.10.5.32:5432/twitterdb")
+//          //      .option("dbtable", gp.getPGTweetsTable)
+//          .option("dbtable", "tweets_info")
+//          .option("user", "twitter")
+//          .option("password", "twitter123")
+//          .mode("append")
+//          .save()
+//
+//  }
 }
 
 

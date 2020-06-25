@@ -240,8 +240,6 @@ public class TwitterProducer {
                 859986491879051264L,          //Cpostnews
                 1001701014L,                   //hamrakura
                 1090509140923944960L              //SalesBerry2
-
-
         );
         hosebirdEndpoint.followings(id);
 
