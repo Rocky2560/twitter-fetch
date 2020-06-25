@@ -1,0 +1,4 @@
+# Default ignored files
+target/
+/src/main/scala/spark/TestObj.scala
+.idea/
