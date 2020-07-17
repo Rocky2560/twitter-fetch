@@ -197,7 +197,8 @@ public class TwitterProducer {
 
         List<String> terms = Lists.newArrayList("#YetiAirlines", "#yetiairlines", "FlyYeti",
                 "#Foodmandu", "Foodmandu", "#foodmandu", "foodmandu",
-                "#BigMart", "#BIGMART", "#Bigmart", "bigmart", "Bigmart",
+//                "#BigMart", "#BIGMART", "#Bigmart", "bigmart", "Bigmart",
+                "Bigmart Nepal", "bigmart Nepal", "$BigMart",
                 "Bhatbhateni", "#Bhatbhateni", "bhatbhateni", "#bhatbhateni",
                 "onlinekhabar", "Online_khabar", "#onlinekhabar", "#Onlinekhabar" , "#OnlineKhabar",
                 "#hamropatro", "#Hamropatro", "#HamroPatro", "hamropatro", "HamroPatro", "Hamro Patro",
