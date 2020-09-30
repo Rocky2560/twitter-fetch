@@ -35,31 +35,36 @@ class CassandraInserts {
   //  }
 
 
-//  //***************************** Tweets and User from Cassandra*****************************************
-//  def TweetDf(): DataFrame = {
-//    var tweetdf: DataFrame = ss.read.format("org.apache.spark.sql.cassandra").
-//      options(Map("table" -> gp.getCassInsert_FromTweetsTable, "keyspace" -> "twitterdb")).
-//      load()
-//    import ss.implicits._
-//    import org.apache.spark.sql.functions.when
-//    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
-//    tweetdf = tweetdf.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
-//    tweetdf = tweetdf.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
-//    tweetdf
-//  }
-//
-//  def UserDf(): DataFrame = {
-//    val userdf: DataFrame = ss.read.format("org.apache.spark.sql.cassandra").
-//      options(Map("table" -> gp.getCassInsert_FromUserTable, "keyspace" -> "twitterdb")).
-//      load()
-//    userdf
-//  }
+  //  //***************************** Tweets and User from Cassandra*****************************************
+  //  def TweetDf(): DataFrame = {
+  //    var tweetdf: DataFrame = ss.read.format("org.apache.spark.sql.cassandra").
+  //      options(Map("table" -> gp.getCassInsert_FromTweetsTable, "keyspace" -> "twitterdb")).
+  //      load()
+  //    import ss.implicits._
+  //    import org.apache.spark.sql.functions.when
+  //    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
+  //    tweetdf = tweetdf.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+  //    tweetdf = tweetdf.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
+  //    tweetdf
+  //  }
+  //
+  //  def UserDf(): DataFrame = {
+  //    val userdf: DataFrame = ss.read.format("org.apache.spark.sql.cassandra").
+  //      options(Map("table" -> gp.getCassInsert_FromUserTable, "keyspace" -> "twitterdb")).
+  //      load()
+  //    userdf
+  //  }
 
   def InsertData(msg: String): Unit = {
-    val tweetsinfo = explodeInsert.tweetsInfo(msg)
+    var tweetsinfo = explodeInsert.tweetsInfo(msg)
+    import ss.implicits._
+    import org.apache.spark.sql.functions.when
+    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
+    tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+    tweetsinfo = tweetsinfo.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
     val userinfo = explodeInsert.userInfo(msg)
 
-    val tweet_user_date_df =  Tweets_User_Date(tweetsinfo, userinfo)
+    val tweet_user_date_df = Tweets_User_Date(tweetsinfo, userinfo)
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
 
@@ -70,12 +75,17 @@ class CassandraInserts {
 
   }
 
-  def SpecificInsertData(msg:String): Unit ={
+  def SpecificInsertData(msg: String): Unit = {
     //Specific tweets (Bhannale Nepal bhanda baira ko tweets)
-    val tweetsinfo = explodeInsert.SpecificTweets(msg)
+    var tweetsinfo = explodeInsert.SpecificTweets(msg)
+    import ss.implicits._
+    import org.apache.spark.sql.functions.when
+    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
+    tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+    tweetsinfo = tweetsinfo.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
     val userinfo = explodeInsert.userInfo(msg)
 
-    val tweet_user_date_df =  Tweets_User_Date(tweetsinfo, userinfo)
+    val tweet_user_date_df = Tweets_User_Date(tweetsinfo, userinfo)
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
 
@@ -129,8 +139,8 @@ class CassandraInserts {
     final_df = final_df.withColumn("created_month", month(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
 
     final_df.write.format("org.apache.spark.sql.cassandra").mode(SaveMode.Append)
-            .options(Map("table" -> "tweets_user_by_date_client", "keyspace" -> "twitterdb")).save()
-//      .options(Map("table" -> "test_tweets_user_by_date_client", "keyspace" -> "twitterdb")).save()
+      .options(Map("table" -> "tweets_user_by_date_client", "keyspace" -> "twitterdb")).save()
+    //      .options(Map("table" -> "test_tweets_user_by_date_client", "keyspace" -> "twitterdb")).save()
   }
 
   //5
