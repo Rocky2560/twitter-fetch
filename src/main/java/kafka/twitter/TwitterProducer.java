@@ -18,6 +18,7 @@ import connections.PostgresConnection;
 import org.apache.kafka.clients.producer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.CassandraInserts;
 import spark.ExplodeInsert;
 
 
@@ -45,6 +46,10 @@ public class TwitterProducer {
 
     KakfaProducerConfig kpc = new KakfaProducerConfig();
 //    MongoConnection mc = new MongoConnection();
+
+
+    //Cassandra
+    CassandraInserts cassandraInserts = new CassandraInserts();
 
     public TwitterProducer() throws IOException {
         this.consumerKey = gp.getConsumerKey();
@@ -113,6 +118,7 @@ public class TwitterProducer {
 //
                         //Postgres
                         //Check if Data Exists in Postgres
+
                         pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
 
 //                        kpc.SendToTopic("test-tweets", pg_producer_user, (JsonObject) jsonParser.parse(expInsert.convertStr(msg)));
@@ -120,6 +126,10 @@ public class TwitterProducer {
                         //Insert Tweet Data to postgres
                         expInsert.InsertTweets(msg);
 //                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.convertStrTweets(msg)));
+
+
+                        //CassandraInserts
+                        cassandraInserts.InsertData(msg);
                     }
                 } catch (Exception e) {
                     //Mongo
@@ -128,6 +138,10 @@ public class TwitterProducer {
                     //Postgres
                     pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
                     expInsert.SpecficInsert(msg);
+
+
+                    //CassandraInserts
+                    cassandraInserts.SpecificInsertData(msg);
                 }
 
             }

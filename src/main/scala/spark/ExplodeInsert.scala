@@ -13,13 +13,6 @@ class ExplodeInsert {
   val dc: DataCleaning = new DataCleaning;
   val checkExist: CheckExist = new CheckExist
 
-  def userInfo(msg: String): DataFrame = {
-    val df: DataFrame = cdf.json_to_df(msg: String)
-    val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
-    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
-    user_df
-  }
-
   def convertStr(msg: String): String = {
     val df = userInfo(msg)
     val json_user = df.na.fill("").toJSON.collectAsList().get(0).toString
@@ -28,8 +21,15 @@ class ExplodeInsert {
 
   def convertStrTweets(msg: String): String = {
     val df = tweetsInfo(msg)
-    val json_user = df.na.fill("").toJSON.collectAsList().get(0).toString
-    json_user
+    val json_tweets = df.na.fill("").toJSON.collectAsList().get(0).toString
+    json_tweets
+  }
+
+  def userInfo(msg: String): DataFrame = {
+    val df: DataFrame = cdf.json_to_df(msg: String)
+    val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
+    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
+    user_df
   }
 
   def tweetsInfo(msg: String): DataFrame = {
@@ -45,6 +45,7 @@ class ExplodeInsert {
       } else {
         checkExist.mentionsHashtags(df)
       }
+
     tweets_df
   }
 
@@ -74,6 +75,8 @@ class ExplodeInsert {
       .save()
   }
 
+
+  //Tweets not from Nepal
   def SpecficInsert(msg: String) = {
     val df: DataFrame = SpecificTweets(msg)
     df.write

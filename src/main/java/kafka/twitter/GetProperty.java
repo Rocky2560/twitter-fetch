@@ -55,4 +55,48 @@ public class GetProperty {
 
 
 
+
+    //Cassandra Properties
+
+
+    public String getHost() {
+        return this.prop.getProperty("host");
+    }
+
+    public String getCassUser() {
+        return this.prop.getProperty("user");
+    }
+
+    public String getCassPass() {
+        return this.prop.getProperty("pass");
+    }
+
+    public int getPort() {
+        return Integer.parseInt(this.prop.getProperty("port"));
+    }
+
+    public String getKeyspace() {
+        return this.prop.getProperty("keyspace");
+    }
+
+    public String getTable_name() {
+        return this.prop.getProperty("table_name");
+    }
+
+    public String getKeystore_path() {
+        return this.prop.getProperty("keystore_path");
+    }
+
+    public String getKeystore_password() {
+        return this.prop.getProperty("keystore_password");
+    }
+
+    public String getTruststore_path() {
+        return this.prop.getProperty("truststore_path");
+    }
+
+    public String getTruststore_password() {
+        return this.prop.getProperty("truststore_password");
+    }
+
 }
