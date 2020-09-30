@@ -58,12 +58,15 @@ class CassandraInserts {
   def InsertData(msg: String): Unit = {
     val tweetsinfo = explodeInsert.tweetsInfo(msg)
     val userinfo = explodeInsert.userInfo(msg)
-    Insert_TweetsInfo(tweetsinfo)
-    Insert_UserInfo(userinfo)
-    Insert_Tweets_By_Lang(tweetsinfo)
+
     val tweet_user_date_df =  Tweets_User_Date(tweetsinfo, userinfo)
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
+
+    Insert_TweetsInfo(tweetsinfo)
+    Insert_UserInfo(userinfo)
+    Insert_Tweets_By_Lang(tweetsinfo)
+
 
   }
 
@@ -71,12 +74,16 @@ class CassandraInserts {
     //Specific tweets (Bhannale Nepal bhanda baira ko tweets)
     val tweetsinfo = explodeInsert.SpecificTweets(msg)
     val userinfo = explodeInsert.userInfo(msg)
-    Insert_TweetsInfo(tweetsinfo)
-    Insert_UserInfo(userinfo)
-    Insert_Tweets_By_Lang(tweetsinfo)
+
     val tweet_user_date_df =  Tweets_User_Date(tweetsinfo, userinfo)
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
+
+
+    Insert_TweetsInfo(tweetsinfo)
+    Insert_UserInfo(userinfo)
+    Insert_Tweets_By_Lang(tweetsinfo)
+
   }
 
   //1
