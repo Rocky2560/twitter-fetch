@@ -79,6 +79,7 @@ class CassandraInserts {
   def SpecificInsertData(msg: String): Unit = {
     //Specific tweets (Bhannale Nepal bhanda baira ko tweets)
     var tweetsinfo = explodeInsert.SpecificTweets(msg)
+    print("MESSAGE_PRINT:", msg)
     tweetsinfo.show()
     import ss.implicits._
     import org.apache.spark.sql.functions.when
