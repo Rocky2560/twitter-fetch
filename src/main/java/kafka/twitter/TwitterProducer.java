@@ -129,7 +129,7 @@ public class TwitterProducer {
 
 
                         //CassandraInserts
-                        cassandraInserts.InsertData(msg);
+//                        cassandraInserts.InsertData(msg);
                     }
                 } catch (Exception e) {
                     //Mongo
@@ -141,7 +141,7 @@ public class TwitterProducer {
 
 
                     //CassandraInserts
-                    cassandraInserts.SpecificInsertData(msg);
+//                    cassandraInserts.SpecificInsertData(msg);
                 }
 
             }
