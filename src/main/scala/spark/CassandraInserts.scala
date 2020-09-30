@@ -55,18 +55,31 @@ class CassandraInserts {
   //    userdf
   //  }
 
-  def InsertData(msg: String): Unit = {
+  def TweetDf(msg: String): DataFrame = {
     var tweetsinfo = explodeInsert.tweetsInfo(msg)
-    print("INSERTDATA():", msg)
-    tweetsinfo.show()
     import ss.implicits._
     import org.apache.spark.sql.functions.when
     //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
-    tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+    if (tweetsinfo.columns.contains("country")) {
+      tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+    } else {
+      tweetsinfo = tweetsinfo.withColumn("country", lit("N/A"))
+    }
     tweetsinfo = tweetsinfo.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
+    tweetsinfo
+  }
+
+  def UserDf(msg: String): DataFrame = {
     val userinfo = explodeInsert.userInfo(msg)
-    userinfo.show()
+    userinfo
+  }
+
+
+  def InsertData(msg: String): Unit = {
+    val tweetsinfo = TweetDf(msg)
+    val userinfo = UserDf(msg)
     val tweet_user_date_df = Tweets_User_Date(tweetsinfo, userinfo)
+
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
 
@@ -79,18 +92,10 @@ class CassandraInserts {
 
   def SpecificInsertData(msg: String): Unit = {
     //Specific tweets (Bhannale Nepal bhanda baira ko tweets)
-    print("SPECIFICINSERTDATA():", msg)
-    var tweetsinfo = explodeInsert.SpecificTweets(msg)
-    tweetsinfo.show()
-    import ss.implicits._
-    import org.apache.spark.sql.functions.when
-    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
-    tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
-    tweetsinfo = tweetsinfo.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
-    val userinfo = explodeInsert.userInfo(msg)
-    userinfo.show()
-
+    val tweetsinfo = TweetDf(msg)
+    val userinfo = UserDf(msg)
     val tweet_user_date_df = Tweets_User_Date(tweetsinfo, userinfo)
+
     Insert_Tweets_User_By_Date_Client(tweet_user_date_df)
     Insert_Tweets_User_By_Country_Date(tweet_user_date_df)
 
@@ -140,7 +145,7 @@ class CassandraInserts {
     //Year and Month partition key
     import org.apache.spark.sql.functions._
     import ss.implicits._
-        final_df = final_df.withColumn("created_year", year(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
+    final_df = final_df.withColumn("created_year", year(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
     final_df = final_df.withColumn("created_month", month(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
 
     final_df.write.format("org.apache.spark.sql.cassandra").mode(SaveMode.Append)
