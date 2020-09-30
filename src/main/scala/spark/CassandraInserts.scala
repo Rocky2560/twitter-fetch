@@ -135,7 +135,7 @@ class CassandraInserts {
     //Year and Month partition key
     import org.apache.spark.sql.functions._
     import ss.implicits._
-    //    final_df = final_df.withColumn("created_year", year(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
+        final_df = final_df.withColumn("created_year", year(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
     final_df = final_df.withColumn("created_month", month(to_timestamp($"created_at", "yyyy-MM-dd HH:mm:ss")))
 
     final_df.write.format("org.apache.spark.sql.cassandra").mode(SaveMode.Append)
