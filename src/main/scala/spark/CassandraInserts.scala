@@ -69,6 +69,20 @@ class CassandraInserts {
     tweetsinfo
   }
 
+  def SpecificTweetDf(msg: String): DataFrame = {
+    var tweetsinfo = explodeInsert.SpecificTweets(msg)
+    import ss.implicits._
+    import org.apache.spark.sql.functions.when
+    //Set Default Values for Null Fields //Why? Because country and lang is set as parition key in some tables and primary key cant be null
+    if (tweetsinfo.columns.contains("country")) {
+      tweetsinfo = tweetsinfo.withColumn("country", col = when($"country".isNotNull, $"country").otherwise("N/A"))
+    } else {
+      tweetsinfo = tweetsinfo.withColumn("country", lit("N/A"))
+    }
+    tweetsinfo = tweetsinfo.withColumn("lang", col = when($"lang".isNotNull, $"lang").otherwise("N/A"))
+    tweetsinfo
+  }
+
   def UserDf(msg: String): DataFrame = {
     val userinfo = explodeInsert.userInfo(msg)
     userinfo
@@ -92,7 +106,7 @@ class CassandraInserts {
 
   def SpecificInsertData(msg: String): Unit = {
     //Specific tweets (Bhannale Nepal bhanda baira ko tweets)
-    val tweetsinfo = TweetDf(msg)
+    val tweetsinfo = SpecificTweetDf(msg)
     val userinfo = UserDf(msg)
     val tweet_user_date_df = Tweets_User_Date(tweetsinfo, userinfo)
 
