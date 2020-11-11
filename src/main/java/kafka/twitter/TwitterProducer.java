@@ -229,7 +229,8 @@ public class TwitterProducer {
                 "CitizenPost News", "Cpostnews", "#cpostnews",
                 "hamrakura",
                 "Saleways", "saleways",
-                "Salesberry", "#salesberry", "#Salesberry", "salesberry"
+                "Salesberry", "#salesberry", "#Salesberry", "salesberry",
+                "atsumari_llc"
         );
 
         hosebirdEndpoint.trackTerms(terms);
@@ -251,7 +252,8 @@ public class TwitterProducer {
                 4886144923L,                    //12khari
                 859986491879051264L,          //Cpostnews
                 1001701014L,                   //hamrakura
-                1090509140923944960L              //SalesBerry2
+                1090509140923944960L,              //SalesBerry2
+                1280391401058914304L            //atsumari_llc
         );
         hosebirdEndpoint.followings(id);
 

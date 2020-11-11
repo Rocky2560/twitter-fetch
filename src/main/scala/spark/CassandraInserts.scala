@@ -151,7 +151,6 @@ class CassandraInserts {
     final_df
   }
 
-
   //4
   def Insert_Tweets_User_By_Date_Client(df: DataFrame): Unit = {
     var final_df = df
