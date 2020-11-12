@@ -39,7 +39,7 @@ public class PostgresConnection {
     }
 
 
-    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg) throws SQLException, IOException {
+    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg, String check_nepal) throws SQLException, IOException {
 
         String check_id_query = "select id from "+user_table+" where id = "+ getUserID(msg) +"";
         Statement stmt = conn.createStatement();
@@ -50,7 +50,11 @@ public class PostgresConnection {
 
         } else {
             //send to postgres
-            explode.InsertUserInfo(msg);
+            if (check_nepal.equals("y")){
+                explode.InsertUserInfo(msg);
+            } else if (check_nepal.equals("n")){
+                explode.SpecificUser(msg);
+            }
 
             //send to kafka
 //            kpc.SendToTopic("test-tweets", user_producer, (JsonObject) jsonParser.parse(explode.convertStr(msg)));

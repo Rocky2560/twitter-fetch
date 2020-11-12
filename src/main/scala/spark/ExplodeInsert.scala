@@ -64,7 +64,7 @@ class ExplodeInsert {
   }
 
   def InsertUserInfo(msg: String) = {
-    val df: DataFrame = userInfo(msg)
+    val df: DataFrame = SpecificUser(msg)
     df.write
       .format("jdbc")
       .option("url", gp.getPGUrl)
@@ -87,6 +87,13 @@ class ExplodeInsert {
       .option("password", gp.getPGPassword)
       .mode("append")
       .save()
+  }
+
+  def SpecificUser(msg: String): DataFrame = {
+    val df: DataFrame = cdf.json_to_df(msg: String)
+    val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
+//    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
+    user_df_temp
   }
 
 

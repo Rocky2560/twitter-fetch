@@ -101,7 +101,6 @@ class CassandraInserts {
     Insert_UserInfo(userinfo)
     Insert_Tweets_By_Lang(tweetsinfo)
 
-
   }
 
   def SpecificInsertData(msg: String): Unit = {

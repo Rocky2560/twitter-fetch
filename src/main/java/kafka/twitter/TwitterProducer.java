@@ -119,7 +119,7 @@ public class TwitterProducer {
                         //Postgres
                         //Check if Data Exists in Postgres
 
-                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
 
 //                        kpc.SendToTopic("test-tweets", pg_producer_user, (JsonObject) jsonParser.parse(expInsert.convertStr(msg)));
 
@@ -136,7 +136,7 @@ public class TwitterProducer {
 //                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
 //                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
                     //Postgres
-                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg);
+                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg,"n");
                     expInsert.SpecficInsert(msg);
 
 
