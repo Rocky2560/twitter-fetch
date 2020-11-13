@@ -230,7 +230,8 @@ public class TwitterProducer {
                 "hamrakura",
                 "Saleways", "saleways",
                 "Salesberry", "#salesberry", "#Salesberry", "salesberry",
-                "atsumari_llc"
+                "atsumari_llc",
+                "laguerison_jp"
         );
 
         hosebirdEndpoint.trackTerms(terms);
@@ -253,7 +254,8 @@ public class TwitterProducer {
                 859986491879051264L,          //Cpostnews
                 1001701014L,                   //hamrakura
                 1090509140923944960L,              //SalesBerry2
-                1280391401058914304L            //atsumari_llc
+                1280391401058914304L,            //atsumari_llc
+                1096213091405115393L                //laguerison_jp
         );
         hosebirdEndpoint.followings(id);
 
