@@ -145,7 +145,7 @@ class CassandraInserts {
 
     import ss.implicits._
     val final_df = userdf.join(tweetdf, $"tweetdf.user_id" === $"userdf.userid").drop("userid")
-    final_df.show(5, truncate = true)
+//    final_df.show(5, truncate = true)
 
     final_df
   }
