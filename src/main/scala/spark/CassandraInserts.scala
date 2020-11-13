@@ -1,12 +1,15 @@
 package spark
 
 import kafka.twitter.GetProperty
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions.{lit, month, to_timestamp, when, year}
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 
 class CassandraInserts {
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  Logger.getLogger("akka").setLevel(Level.ERROR)
   val ccs: CreateSparkConnection = new CreateSparkConnection
   val ss: SparkSession = ccs.spark
   val gp: GetProperty = new GetProperty

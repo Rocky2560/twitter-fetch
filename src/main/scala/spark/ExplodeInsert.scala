@@ -1,12 +1,15 @@
 package spark
 
 import kafka.twitter.GetProperty
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{DataFrame, Encoders, Row}
 import org.apache.spark.sql.functions._
 import testpackage.ReadJsonFile
 
 
 class ExplodeInsert {
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  Logger.getLogger("akka").setLevel(Level.ERROR)
   val cdf = new CreateDF
   val gp: GetProperty = new GetProperty;
   val sp: CreateSparkConnection = new CreateSparkConnection;
@@ -35,12 +38,12 @@ class ExplodeInsert {
   def tweetsInfo(msg: String): DataFrame = {
     val df: DataFrame = cdf.json_to_df(msg: String)
 
-//    val arrToString = udf((value: Seq[Seq[Double]]) => {
-//      value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
-//    })
+    //    val arrToString = udf((value: Seq[Seq[Double]]) => {
+    //      value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
+    //    })
 
     val tweets_df =
-      if (df.columns.contains("extended_tweet")){
+      if (df.columns.contains("extended_tweet")) {
         checkExist.extendedTweet(df)
       } else {
         checkExist.mentionsHashtags(df)
@@ -51,8 +54,8 @@ class ExplodeInsert {
 
   def InsertTweets(msg: String) = {
     val df: DataFrame = tweetsInfo(msg)
-//    df.show(truncate = false)
-//    df.printSchema()
+    //    df.show(truncate = false)
+    //    df.printSchema()
     df.write
       .format("jdbc")
       .option("url", gp.getPGUrl)
@@ -92,12 +95,12 @@ class ExplodeInsert {
   def SpecificUser(msg: String): DataFrame = {
     val df: DataFrame = cdf.json_to_df(msg: String)
     val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
-//    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
+    //    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
     user_df_temp
   }
 
 
-  def SpecificTweets(msg:String):DataFrame = {
+  def SpecificTweets(msg: String): DataFrame = {
 
     val df: DataFrame = cdf.json_to_df(msg: String)
 

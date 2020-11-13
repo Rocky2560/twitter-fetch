@@ -1,10 +1,13 @@
 package spark
 
 import kafka.twitter.GetProperty
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{col, lower, regexp_replace}
 
 class DataCleaning {
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  Logger.getLogger("akka").setLevel(Level.ERROR)
 
   val sp: CreateSparkConnection = new CreateSparkConnection;
   val gp: GetProperty = new GetProperty();

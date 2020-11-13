@@ -1,9 +1,12 @@
 package spark
 
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{col, explode, to_timestamp, to_utc_timestamp, udf}
 
 class CheckExist {
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  Logger.getLogger("akka").setLevel(Level.ERROR)
 
   val arrToString = udf((value: Seq[Seq[Double]]) => {
     value.map(x => x.map(_.toString).mkString("(", ",", ")")).mkString("(",",",")")
