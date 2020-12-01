@@ -255,7 +255,9 @@ public class TwitterProducer {
                 1001701014L,                   //hamrakura
                 1090509140923944960L,              //SalesBerry2
                 1280391401058914304L,            //atsumari_llc
-                1096213091405115393L                //laguerison_jp
+                1096213091405115393L,                //laguerison_jp
+                204245399L,                         //nhk_news
+                169480493L                         //nikkei
         );
         hosebirdEndpoint.followings(id);
 
