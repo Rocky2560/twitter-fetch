@@ -282,7 +282,12 @@ public class TwitterProducer {
 //
                                 new Location(
                         new Location.Coordinate(79.8695023432, 25.6533705916), // south west
-                        new Location.Coordinate( 88.4373289467,    30.6875340549))
+                        new Location.Coordinate( 88.4373289467,    30.6875340549)),
+
+                //Japan
+                new Location(
+                        new Location.Coordinate(129.4387611623, 28.7573264885), // south west
+                        new Location.Coordinate(147.4591103885, 45.649683149))
         ));
 
         // These secrets are read from config file
