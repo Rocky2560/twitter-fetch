@@ -11,8 +11,8 @@ public class GetProperty {
     public GetProperty() throws IOException{
         this.prop = new Properties();
 
-        InputStream inputStream = new FileInputStream("/etc/kafka-twitter/app.properties");
-//        InputStream inputStream = new FileInputStream("/etc/kafka-twitter/app2.properties");
+//        InputStream inputStream = new FileInputStream("/etc/kafka-twitter/app.properties");
+        InputStream inputStream = new FileInputStream("/etc/kafka-twitter/app2.properties");
         this.prop.load(inputStream);
     }
 

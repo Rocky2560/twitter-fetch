@@ -130,6 +130,12 @@ public class TwitterProducer {
 
                         //CassandraInserts
                         cassandraInserts.InsertData(msg);
+                    } else if (country_code.equals("JP")){
+                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
+                        expInsert.InsertTweets(msg);
+                        cassandraInserts.InsertData(msg);
+
+
                     }
                 } catch (Exception e) {
                     //Mongo

@@ -39,7 +39,8 @@ public class PostgresConnection {
     }
 
 
-    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg, String check_nepal) throws SQLException, IOException {
+    //Checks if user exists or not and performs actions based on it.
+    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg, String check_country) throws SQLException, IOException {
 
         String check_id_query = "select id from "+user_table+" where id = "+ getUserID(msg) +"";
         Statement stmt = conn.createStatement();
@@ -50,10 +51,10 @@ public class PostgresConnection {
 
         } else {
             //send to postgres
-            if (check_nepal.equals("y")){
+            if (check_country.equals("y")){
                 explode.InsertUserInfo(msg);
-            } else if (check_nepal.equals("n")){
-                explode.SpecificUser(msg);
+            } else if (check_country.equals("n")){
+                explode.InsertSpecificUserInfo(msg);
             }
 
             //send to kafka
@@ -70,6 +71,7 @@ public class PostgresConnection {
         return user_id;
     }
 
+    //If user already exists updates User information
     public void updateInfo(BigInteger user_id, String msg) throws SQLException, IOException {
 
 //        String str = expInsert.userInfo(rjf.fileJson().toString());

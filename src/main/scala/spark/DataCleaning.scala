@@ -12,7 +12,7 @@ class DataCleaning {
   val sp: CreateSparkConnection = new CreateSparkConnection;
   val gp: GetProperty = new GetProperty();
 
-  def LocationCleaning(user_df: DataFrame): String = {
+  def LocationCleaningNepal(user_df: DataFrame): String = {
     //    val city_df1 = sp.spark.read.format("csv").option("header", "true").load("/Users/tchiringlama/nepali_cities.csv")
     val city_df1 = sp.spark.read.format("csv").option("header", "true").load(gp.getCity)
     val city_df = city_df1.select(city_df1.columns.map(c => lower(col(c)).alias(c)): _*)

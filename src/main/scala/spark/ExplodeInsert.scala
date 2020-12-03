@@ -31,7 +31,7 @@ class ExplodeInsert {
   def userInfo(msg: String): DataFrame = {
     val df: DataFrame = cdf.json_to_df(msg: String)
     val user_df_temp = df.select("user.id", "user.name", "user.screen_name", "user.location", "user.description", "user.followers_count", "user.friends_count", "user.profile_image_url_https")
-    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaning(user_df_temp)))
+    val user_df = user_df_temp.withColumn("location", when(!isnull(col("location")), dc.LocationCleaningNepal(user_df_temp)))
     user_df
   }
 
@@ -44,11 +44,20 @@ class ExplodeInsert {
 
     val tweets_df =
       if (df.columns.contains("extended_tweet")) {
+        //check for extendedTweet
         checkExist.extendedTweet(df)
       } else {
+        //check for mentionHashtags
         checkExist.mentionsHashtags(df)
       }
-
+//    if (tweets_df.filter(tweets_df("country").equalTo("Japan")).select("country").collect().toString.contains("日本")){
+//      tweets_df.show(false)
+//    }
+    tweets_df.show(false)
+    val check_jp = tweets_df.select(col("country")).collect()
+    if (check_jp(0)(0).equals("日本")){
+      print("HELLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    }
     tweets_df
   }
 
@@ -67,6 +76,18 @@ class ExplodeInsert {
   }
 
   def InsertUserInfo(msg: String) = {
+    val df: DataFrame = userInfo(msg)
+    df.write
+      .format("jdbc")
+      .option("url", gp.getPGUrl)
+      .option("dbtable", gp.getPGUserTable)
+      .option("user", gp.getPGUsername)
+      .option("password", gp.getPGPassword)
+      .mode("append")
+      .save()
+  }
+
+  def InsertSpecificUserInfo(msg: String) = {
     val df: DataFrame = SpecificUser(msg)
     df.write
       .format("jdbc")
