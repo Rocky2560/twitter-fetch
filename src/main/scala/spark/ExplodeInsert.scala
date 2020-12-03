@@ -4,7 +4,6 @@ import kafka.twitter.GetProperty
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{DataFrame, Encoders, Row}
 import org.apache.spark.sql.functions._
-//import testpackage.ReadJsonFile
 
 
 class ExplodeInsert {
