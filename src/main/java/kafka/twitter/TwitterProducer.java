@@ -131,8 +131,11 @@ public class TwitterProducer {
                         //CassandraInserts
                         cassandraInserts.InsertData(msg);
                     } else if (country_code.equals("JP")){
+                        //Check If Data Exists in Postgres and perform action based on condition
                         pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
+                        //Insert Tweet Data to Postgres
                         expInsert.InsertTweets(msg);
+                        //CassandraInserts
                         cassandraInserts.InsertData(msg);
 
 

@@ -42,7 +42,7 @@ class ExplodeInsert {
     //      value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
     //    })
 
-    val tweets_df =
+    var tweets_df =
       if (df.columns.contains("extended_tweet")) {
         //check for extendedTweet
         checkExist.extendedTweet(df)
@@ -50,14 +50,10 @@ class ExplodeInsert {
         //check for mentionHashtags
         checkExist.mentionsHashtags(df)
       }
-//    if (tweets_df.filter(tweets_df("country").equalTo("Japan")).select("country").collect().toString.contains("日本")){
-//      tweets_df.show(false)
-//    }
-    tweets_df.show(false)
-    val check_jp = tweets_df.select(col("country")).collect()
-    if (check_jp(0)(0).equals("日本")){
-      print("HELLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-    }
+    tweets_df = tweets_df.withColumn("country", when(col("country") === "日本", "Japan").otherwise(col("country")))
+    //    if (tweets_df.filter(tweets_df("country").equalTo("Japan")).select("country").collect().toString.contains("日本")){
+    //      tweets_df.show(false)
+    //    }
     tweets_df
   }
 
