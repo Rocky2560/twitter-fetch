@@ -3,7 +3,7 @@ package connections;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import kafka.twitter.GetProperty;
-import kafka.twitter.KakfaProducerConfig;
+//import kafka.twitter.KakfaProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import spark.ExplodeInsert;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PostgresConnection {
     private final Connection conn;
-    KakfaProducerConfig kpc = new KakfaProducerConfig();
+//    KakfaProducerConfig kpc = new KakfaProducerConfig();
     GetProperty gp = new GetProperty();
     ExplodeInsert explode = new ExplodeInsert();
 //    ReadJsonFile rjf = new ReadJsonFile();
@@ -40,7 +40,8 @@ public class PostgresConnection {
 
 
     //Checks if user exists or not and performs actions based on it.
-    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg, String check_country) throws SQLException, IOException {
+//    public void checkExist(String topic, KakfaProducerConfig kpc, KafkaProducer<String,String> user_producer, String msg, String check_country) throws SQLException, IOException {
+    public void checkExist(String msg, String check_country) throws SQLException, IOException {
 
         String check_id_query = "select id from "+user_table+" where id = "+ getUserID(msg) +"";
         Statement stmt = conn.createStatement();

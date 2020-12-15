@@ -44,7 +44,7 @@ public class TwitterProducer {
     JsonObject userinfo;
     JsonObject tweetinfo;
 
-    KakfaProducerConfig kpc = new KakfaProducerConfig();
+//    KakfaProducerConfig kpc = new KakfaProducerConfig();
 //    MongoConnection mc = new MongoConnection();
 
 
@@ -73,13 +73,13 @@ public class TwitterProducer {
         client.connect();
 
         //create a kafka producer
-        KafkaProducer<String, String> producer_user = kpc.createKafkaProducer();
-        KafkaProducer<String, String> producer_tweets = kpc.createKafkaProducer();
+//        KafkaProducer<String, String> producer_user = kpc.createKafkaProducer();
+//        KafkaProducer<String, String> producer_tweets = kpc.createKafkaProducer();
 
         PostgresConnection pgc = new PostgresConnection();
 
-        KafkaProducer<String, String> pg_producer_user = kpc.createKafkaProducer();
-        KafkaProducer<String, String> pg_producer_tweets = kpc.createKafkaProducer();
+//        KafkaProducer<String, String> pg_producer_user = kpc.createKafkaProducer();
+//        KafkaProducer<String, String> pg_producer_tweets = kpc.createKafkaProducer();
 
         ExplodeInsert expInsert = new ExplodeInsert();
 
@@ -118,8 +118,9 @@ public class TwitterProducer {
 //
                         //Postgres
                         //Check if Data Exists in Postgres
-
-                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
+                        //Uncomment For Using Kafka
+//                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
+                        pgc.checkExist(msg, "y");
 
 //                        kpc.SendToTopic("test-tweets", pg_producer_user, (JsonObject) jsonParser.parse(expInsert.convertStr(msg)));
 
@@ -132,7 +133,10 @@ public class TwitterProducer {
                         cassandraInserts.InsertData(msg);
                     } else if (country_code.equals("JP")){
                         //Check If Data Exists in Postgres and perform action based on condition
-                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "n");
+                        //check_location n for no location cleaning
+                        //Uncomment For Using Kafka
+//                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "n");
+                        pgc.checkExist(msg, "n");
                         //Insert Tweet Data to Postgres
                         expInsert.InsertTweets(msg);
                         //CassandraInserts
@@ -145,9 +149,10 @@ public class TwitterProducer {
 //                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
 //                    kpc.SendToTopic(gp.getTweetsTopic(), producer_tweets, tweetinfo);
                     //Postgres
-                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg,"n");
+                    //Uncomment For Using Kafka
+//                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg,"n");
+                    pgc.checkExist(msg,"n");
                     expInsert.SpecficInsert(msg);
-
 
                     //CassandraInserts
                     cassandraInserts.SpecificInsertData(msg);
@@ -181,35 +186,35 @@ public class TwitterProducer {
         return user_info;
     }
 
-    private JsonObject getTweetObject(String msg, JsonObject userinfo) {
-        JsonObject tweet_info;
-
-        String screen_name;
-        String user_id;
-
-        try {
-            tweet_info = jsonParser.parse(msg)
-                    .getAsJsonObject();
-
-            user_id = userinfo
-                    .get("id_str")
-                    .getAsString();
-
-            screen_name = userinfo
-                    .get("screen_name")
-                    .getAsString();
-
-            tweet_info.addProperty("user_id", user_id);
-            tweet_info.addProperty("screen_name", screen_name);
-
-            tweet_info.remove("user");
-
-        } catch (NullPointerException e) {
-            logger.error("Empty data set ", e);
-            return null;
-        }
-        return tweet_info;
-    }
+//    private JsonObject getTweetObject(String msg, JsonObject userinfo) {
+//        JsonObject tweet_info;
+//
+//        String screen_name;
+//        String user_id;
+//
+//        try {
+//            tweet_info = jsonParser.parse(msg)
+//                    .getAsJsonObject();
+//
+//            user_id = userinfo
+//                    .get("id_str")
+//                    .getAsString();
+//
+//            screen_name = userinfo
+//                    .get("screen_name")
+//                    .getAsString();
+//
+//            tweet_info.addProperty("user_id", user_id);
+//            tweet_info.addProperty("screen_name", screen_name);
+//
+//            tweet_info.remove("user");
+//
+//        } catch (NullPointerException e) {
+//            logger.error("Empty data set ", e);
+//            return null;
+//        }
+//        return tweet_info;
+//    }
 
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue) {
