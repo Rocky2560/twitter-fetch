@@ -5,6 +5,8 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{DataFrame, Encoders, Row}
 import org.apache.spark.sql.functions._
 
+import scala.reflect.internal.util.TriState.True
+
 
 class ExplodeInsert {
   Logger.getLogger("org").setLevel(Level.ERROR)
@@ -37,37 +39,41 @@ class ExplodeInsert {
   def tweetsInfo(msg: String): DataFrame = {
     val df: DataFrame = cdf.json_to_df(msg: String)
 
-    //    val arrToString = udf((value: Seq[Seq[Double]]) => {
-    //      value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
-    //    })
+//        val arrToString = udf((value: Seq[Seq[Double]]) => {
+//          value.map(x => x.map(_.toString).mkString("\"", ",", "\"")).mkString(",")
+//        })
 
-    var tweets_df =
-      if (df.columns.contains("extended_tweet")) {
-        //check for extendedTweet
-        checkExist.extendedTweet(df)
-      } else {
-        //check for mentionHashtags
-        checkExist.mentionsHashtags(df)
-      }
-    tweets_df = tweets_df.withColumn("country", when(col("country") === "日本", "Japan").otherwise(col("country")))
-    //    if (tweets_df.filter(tweets_df("country").equalTo("Japan")).select("country").collect().toString.contains("日本")){
-    //      tweets_df.show(false)
-    //    }
-    tweets_df
+//    var tweets_df =
+//      if (df.columns.contains("extended_tweet")) {
+//        //check for extendedTweet
+//        checkExist.extendedTweet(df)
+//      } else {
+//        check for mentionHashtags
+//        checkExist.mentionsHashtags(df)
+//      }
+//    tweets_df = tweets_df.withColumn("country", when(col("country") === "日本", "Japan").otherwise(col("country")))
+//        if (tweets_df.filter(tweets_df("country").equalTo("Japan")).select("country").collect().toString.contains("日本")){
+//          tweets_df.show(false)
+//        }
+    df
   }
 
   def InsertTweets(msg: String) = {
     val df: DataFrame = tweetsInfo(msg)
+    print(msg)
+    print(df)
     //    df.show(truncate = false)
     //    df.printSchema()
-    df.write
-      .format("jdbc")
-      .option("url", gp.getPGUrl)
-      .option("dbtable", "public." + gp.getPGTweetsTable)
-      .option("user", gp.getPGUsername)
-      .option("password", gp.getPGPassword)
-      .mode("append")
-      .save()
+//    df.write
+//      .format("jdbc")
+//      .option("url", gp.getPGUrl)
+//      .option("dbtable", "public." + gp.getPGTweetsTable)
+//      .option("user", gp.getPGUsername)
+//      .option("password", gp.getPGPassword)
+//      .mode("append")
+//      .save()
+    df.write.format("com.databricks.spark.csv").mode("append")
+      .save("/home/rocky/Desktop/tweets.csv")
   }
 
   def InsertUserInfo(msg: String) = {

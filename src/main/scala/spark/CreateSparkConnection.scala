@@ -14,7 +14,7 @@ class CreateSparkConnection {
   val spark:SparkSession = SparkSession
     .builder()
     .config("spark.debug.maxToStringFields", "100")
-
+    .config("spark.driver.bindAddress", "127.0.0.1")
     .config("spark.debug.maxToStringFields", "100")
     .config("spark.cassandra.connection.host", gp.getHost)
     .config("spark.cassandra.connection.port", gp.getPort)

@@ -15,13 +15,18 @@ import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 //import connections.MongoConnection;
 import connections.PostgresConnection;
+import org.apache.commons.io.FileUtils;
 import org.apache.kafka.clients.producer.*;
+import org.json.CDL;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.CassandraInserts;
+import scala.util.parsing.json.JSONObject;
+//import spark.CassandraInserts;
 import spark.ExplodeInsert;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -29,6 +34,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+
+import static com.sun.jersey.core.header.ContentDisposition.type;
 
 public class TwitterProducer {
 
@@ -49,7 +56,7 @@ public class TwitterProducer {
 
 
     //Cassandra
-    CassandraInserts cassandraInserts = new CassandraInserts();
+//    CassandraInserts cassandraInserts = new CassandraInserts();
 
     public TwitterProducer() throws IOException {
         this.consumerKey = gp.getConsumerKey();
@@ -76,12 +83,12 @@ public class TwitterProducer {
 //        KafkaProducer<String, String> producer_user = kpc.createKafkaProducer();
 //        KafkaProducer<String, String> producer_tweets = kpc.createKafkaProducer();
 
-        PostgresConnection pgc = new PostgresConnection();
+//        PostgresConnection pgc = new PostgresConnection();
 
 //        KafkaProducer<String, String> pg_producer_user = kpc.createKafkaProducer();
 //        KafkaProducer<String, String> pg_producer_tweets = kpc.createKafkaProducer();
 
-        ExplodeInsert expInsert = new ExplodeInsert();
+//        ExplodeInsert expInsert = new ExplodeInsert();
 
 
         //loop to send tweets to kafka
@@ -98,15 +105,25 @@ public class TwitterProducer {
             if (msg != null) {
 
                 try {
-                    String country_code = jsonParser.parse(msg)
-                            .getAsJsonObject()
-                            .get("place")
-                            .getAsJsonObject()
-                            .get("country_code")
-                            .getAsString();
+//                    String country_code = jsonParser.parse(msg)
+//                            .getAsJsonObject()
+//                            .get("place")
+//                            .getAsJsonObject()
+//                            .get("country_code")
+//                            .getAsString();
 
-                    if (country_code.equals("NP")) {
+//                    if (country_code.equals("NP")) {\
+//
+                    System.out.println(msg);
                         userinfo = getUserObject(msg);
+////                        System.out.println((msg.getClass().getSimpleName()));
+//                    JSONObject output;
+//                    for (String i : msg)
+//                    {
+//                        Arrays tet = msg[i];
+//                        System.out.println(i[1]);
+//                    }
+
                         //MongoDB
                         //Check if Data Exists in MongoDB
                         //Commented
@@ -120,30 +137,30 @@ public class TwitterProducer {
                         //Check if Data Exists in Postgres
                         //Uncomment For Using Kafka
 //                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "y");
-                        pgc.checkExist(msg, "y");
+//                        pgc.checkExist(msg, "y");
 
 //                        kpc.SendToTopic("test-tweets", pg_producer_user, (JsonObject) jsonParser.parse(expInsert.convertStr(msg)));
 
                         //Insert Tweet Data to postgres
-                        expInsert.InsertTweets(msg);
+//                        expInsert.InsertTweets(msg);
 //                    kpc.SendToTopic(gp.getPGTweetsTopic(), pg_producer_tweets, (JsonObject) jsonParser.parse(expInsert.convertStrTweets(msg)));
 
 
                         //CassandraInserts
-                        cassandraInserts.InsertData(msg);
-                    } else if (country_code.equals("JP")){
+//                        cassandraInserts.InsertData(msg);
+//                    } else if (country_code.equals("JP")){
                         //Check If Data Exists in Postgres and perform action based on condition
                         //check_location n for no location cleaning
                         //Uncomment For Using Kafka
 //                        pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg, "n");
-                        pgc.checkExist(msg, "n");
+//                        pgc.checkExist(msg, "n");
                         //Insert Tweet Data to Postgres
-                        expInsert.InsertTweets(msg);
+//                        expInsert.InsertTweets(msg);
                         //CassandraInserts
-                        cassandraInserts.InsertData(msg);
+//                        cassandraInserts.InsertData(msg);
+                    System.out.println(msg);
 
-
-                    }
+//                    }
                 } catch (Exception e) {
                     //Mongo
 //                    mc.prodMongo(userinfo, producer_user, getUserID(userinfo), kpc);
@@ -151,11 +168,11 @@ public class TwitterProducer {
                     //Postgres
                     //Uncomment For Using Kafka
 //                    pgc.checkExist(gp.getPGUserTopic(), kpc, pg_producer_user, msg,"n");
-                    pgc.checkExist(msg,"n");
-                    expInsert.SpecficInsert(msg);
+//                    pgc.checkExist(msg,"n");
+//                    expInsert.SpecficInsert(msg);
 
                     //CassandraInserts
-                    cassandraInserts.SpecificInsertData(msg);
+//                    cassandraInserts.SpecificInsertData(msg);
                 }
 
             }
@@ -275,25 +292,25 @@ public class TwitterProducer {
         );
         hosebirdEndpoint.followings(id);
 
-        hosebirdEndpoint.locations(Arrays.asList(
-
-                //Kathmandu and Pokhara
-//                new Location(
-//                        new Location.Coordinate(84.8145316838, 27.2710335212), // south west
-//                        new Location.Coordinate( 85.7192215389,    28.1488221902)),
-//                new Location(
-//                        new Location.Coordinate(83.5464124476, 27.732952078), // south west
-//                        new Location.Coordinate( 84.4351982851,    28.5943287285))
+//        hosebirdEndpoint.locations(Arrays.asList(
 //
-                                new Location(
-                        new Location.Coordinate(79.8695023432, 25.6533705916), // south west
-                        new Location.Coordinate( 88.4373289467,    30.6875340549)),
-
-                //Japan
-                new Location(
-                        new Location.Coordinate(129.4387611623, 28.7573264885), // south west
-                        new Location.Coordinate(147.4591103885, 45.649683149))
-        ));
+//                //Kathmandu and Pokhara
+////                new Location(
+////                        new Location.Coordinate(84.8145316838, 27.2710335212), // south west
+////                        new Location.Coordinate( 85.7192215389,    28.1488221902)),
+////                new Location(
+////                        new Location.Coordinate(83.5464124476, 27.732952078), // south west
+////                        new Location.Coordinate( 84.4351982851,    28.5943287285))
+////
+//                                new Location(
+//                        new Location.Coordinate(79.8695023432, 25.6533705916), // south west
+//                        new Location.Coordinate( 88.4373289467,    30.6875340549)),
+//
+//                //Japan
+//                new Location(
+//                        new Location.Coordinate(129.4387611623, 28.7573264885), // south west
+//                        new Location.Coordinate(147.4591103885, 45.649683149))
+//        ));
 
         // These secrets are read from config file
         Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);
